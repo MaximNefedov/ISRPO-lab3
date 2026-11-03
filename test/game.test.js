@@ -80,6 +80,7 @@ test('stale, repeated and premature messages cannot change score', () => {
   assert.equal(game.input(e.id, e.keys[0]), null); assert.equal(game.stats.score, score);
 });
 test('configuration bounds, corrupted saves and reset', () => {
+  assert.doesNotThrow(() => setup(0, { saved: null }));
   assert.deepEqual(config({ minIntervalSeconds: 50, maxIntervalSeconds: 10, reactionSeconds: -1 }), {
     enabled: true, minIntervalSeconds: 50, maxIntervalSeconds: 50, reactionSeconds: 2
   });

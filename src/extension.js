@@ -53,11 +53,15 @@ function activate(context) {
     clearTimeout(loadingTimer);
     updateStatus();
     void save();
-    panel?.webview.postMessage({ type: 'result', ...value, score: game.stats.score, best: game.stats.best });
-    resultTimer = setTimeout(closePanel, 1600);
+    const finishedPanel = panel;
+    if (finishedPanel) {
+      void finishedPanel.webview.postMessage({ type: 'result', ...value, score: game.stats.score, best: game.stats.best });
+      resultTimer = setTimeout(() => { if (panel === finishedPanel) closePanel(); }, 1600);
+    }
   }
   function play() {
     if (panel) return;
+    clearTimeout(resultTimer);
     const event = game.begin();
     if (!event) return;
     const current = vscode.window.createWebviewPanel('codeQte.event', '⚡ Code QTE', { viewColumn: vscode.ViewColumn.Beside, preserveFocus: false }, {
@@ -68,7 +72,7 @@ function activate(context) {
     const nonce = randomBytes(18).toString('hex');
     const script = current.webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'media', 'event.js'));
     const css = current.webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'media', 'event.css'));
-    current.webview.html = `<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${current.webview.cspSource}; script-src 'nonce-${nonce}';"><link rel="stylesheet" href="${css}"><title>Code QTE</title></head><body>
+    const html = `<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${current.webview.cspSource}; script-src 'nonce-${nonce}';"><link rel="stylesheet" href="${css}"><title>Code QTE</title></head><body>
       <main><header><span class="brand">CODE QTE</span><span id="badge">РЕАКЦИЯ</span></header>
       <p class="eyebrow">ПЕРЕРЫВ НА РЕАКЦИЮ</p><h1 id="title">Приготовьтесь</h1><p id="hint">Загрузка задания…</p>
       <div id="keys" aria-label="Клавиши задания"></div>
@@ -97,10 +101,14 @@ function activate(context) {
     });
     // Loading failures never consume the score or leave the scheduler stuck.
     loadingTimer = setTimeout(() => { if (panel === current && game.active?.startedAt === null) cancel(); }, 10000);
+    current.webview.html = html;
   }
   context.subscriptions.push(status, output,
     vscode.commands.registerCommand('codeQte.toggle', async () => {
-      await vscode.workspace.getConfiguration('codeQte').update('enabled', !game.settings.enabled, vscode.ConfigurationTarget.Global);
+      const settings = vscode.workspace.getConfiguration('codeQte');
+      const target = settings.inspect('enabled')?.workspaceValue === undefined
+        ? vscode.ConfigurationTarget.Global : vscode.ConfigurationTarget.Workspace;
+      await settings.update('enabled', !game.settings.enabled, target);
     }),
     vscode.commands.registerCommand('codeQte.playNow', () => {
       if (!game.settings.enabled) void vscode.window.showInformationMessage('Code QTE приостановлен. Включите его командой «Code QTE: Включить / приостановить».');

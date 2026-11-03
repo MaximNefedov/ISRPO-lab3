@@ -14,6 +14,7 @@ function config(value = {}) {
   };
 }
 function cleanStats(saved = {}) {
+  if (!saved || typeof saved !== 'object') saved = {};
   const stats = {};
   for (const name of ['score', 'best', 'successes', 'failures', 'awayMs']) {
     stats[name] = Number.isFinite(saved[name]) && saved[name] >= 0 ? Math.floor(saved[name]) : 0;
@@ -77,7 +78,7 @@ class Game {
   }
   tick() {
     this.accountTime();
-    if (this.active?.startedAt !== null && this.active && this.now() - this.active.startedAt >= this.active.duration) {
+    if (this.active && this.active.startedAt !== null && this.now() - this.active.startedAt >= this.active.duration) {
       return this.finish(false);
     }
     return null;
