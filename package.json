@@ -1,0 +1,35 @@
+{
+  "name": "code-qte",
+  "displayName": "Code QTE",
+  "description": "Случайные задания на реакцию, очки и учет времени вне фокуса VS Code.",
+  "version": "1.0.0",
+  "publisher": "maxim-nefedov",
+  "author": "Максим Нефедов",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "main": "./src/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/extension.js && node --check src/game.js && node --check media/event.js",
+    "package": "node scripts/package.js"
+  },
+  "contributes": {
+    "commands": [
+      { "command": "codeQte.toggle", "title": "Code QTE: Включить / приостановить" },
+      { "command": "codeQte.playNow", "title": "Code QTE: Задание сейчас" },
+      { "command": "codeQte.stats", "title": "Code QTE: Статистика" },
+      { "command": "codeQte.reset", "title": "Code QTE: Сбросить статистику" }
+    ],
+    "configuration": {
+      "title": "Code QTE",
+      "properties": {
+        "codeQte.enabled": { "type": "boolean", "default": true, "scope": "window", "description": "Включить случайные задания." },
+        "codeQte.minIntervalSeconds": { "type": "number", "default": 45, "minimum": 5, "maximum": 3600, "description": "Минимальный интервал между заданиями в секундах." },
+        "codeQte.maxIntervalSeconds": { "type": "number", "default": 120, "minimum": 5, "maximum": 3600, "description": "Максимальный интервал. Если он меньше минимального, используется минимальный." },
+        "codeQte.reactionSeconds": { "type": "number", "default": 5, "minimum": 2, "maximum": 30, "description": "Время на одно задание в секундах." }
+      }
+    }
+  }
+}

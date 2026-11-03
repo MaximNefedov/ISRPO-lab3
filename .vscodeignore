@@ -1,0 +1,9 @@
+.git/**
+.work/**
+.vscode/**
+test/**
+scripts/**
+docs/**
+*.dotx
+*.vsix
+node_modules/**
