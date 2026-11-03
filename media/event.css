@@ -1,0 +1,23 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 28px; color: var(--vscode-editor-foreground, #eee); background: var(--vscode-editor-background, #181b24); font-family: var(--vscode-font-family, system-ui); }
+main { max-width: 520px; margin: 8vh auto; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 25px; border-bottom: 1px solid var(--vscode-panel-border, #444); }
+.brand { letter-spacing: .2em; font-weight: 800; }
+#badge { font-size: 10px; letter-spacing: .1em; border: 1px solid currentColor; border-radius: 20px; padding: 6px 10px; }
+.eyebrow { margin-top: 35px; font-size: 11px; letter-spacing: .15em; color: var(--vscode-descriptionForeground, #aaa); }
+h1 { font-size: clamp(25px, 5vw, 38px); line-height: 1.1; margin: 16px 0; }
+#hint { line-height: 1.65; min-height: 60px; color: var(--vscode-descriptionForeground, #aaa); }
+#keys { display: flex; flex-wrap: wrap; gap: 12px; margin: 25px 0; }
+kbd { min-width: 50px; text-align: center; font-family: inherit; font-size: 24px; font-weight: bold; padding: 15px; border: 1px solid var(--vscode-widget-border, #777); border-bottom-width: 4px; border-radius: 10px; background: var(--vscode-button-secondaryBackground, #333); }
+kbd.done { opacity: .45; color: var(--vscode-testing-iconPassed, #62cc91); border-color: currentColor; }
+.time { display: flex; justify-content: space-between; margin-top: 30px; }
+progress { display: block; width: 100%; height: 8px; margin: 14px 0; accent-color: var(--vscode-button-background, #2288cc); }
+#track { position: relative; height: 36px; border: 1px solid var(--vscode-widget-border, #777); border-radius: 6px; overflow: hidden; }
+#target { position: absolute; top: 0; bottom: 0; background: #238647; border: 2px solid #86e5a8; }
+#cursor { position: absolute; width: 4px; top: 0; bottom: 0; background: var(--vscode-editor-foreground, white); }
+#feedback { font-size: 18px; min-height: 26px; font-weight: 600; }
+footer { margin-top: 30px; line-height: 1.8; font-size: 12px; color: var(--vscode-descriptionForeground, #aaa); }
+.success #badge { color: var(--vscode-testing-iconPassed, #62cc91); }
+.failure #badge { color: var(--vscode-errorForeground, #ff8080); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
